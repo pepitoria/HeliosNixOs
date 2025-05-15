@@ -139,7 +139,6 @@
   };
 
   services.flatpak.enable = true;
-  #services.flatpak.remotes.flathub.url = "https://dl.flathub.org/repo/flathub.flatpakrepo";
   systemd.services.flatpak-repo = {
     wantedBy = [ "multi-user.target" ];
     path = [ pkgs.flatpak ];

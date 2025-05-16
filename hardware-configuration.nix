@@ -24,6 +24,16 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
+# /dev/disk/by-uuid/91f79ba4-4fab-4f79-91cd-0f7d16b136ce /run/media/pep/rust1tb ext4 rw,nosuid,nodev,relatime,errors=remount-ro 0 0
+  fileSystems."/run/media/pep/rust1tb" =
+    { device = "/dev/disk/by-uuid/91f79ba4-4fab-4f79-91cd-0f7d16b136ce";
+      fsType = "ext4";
+      options = [
+        "users"
+        "nofail"
+      ];
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/f704d0fe-0956-4172-a3d8-440f4121611d"; }
     ];

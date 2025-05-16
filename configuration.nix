@@ -4,10 +4,16 @@
 
 { config, pkgs, ... }:
 
-{
+
+let
+  baseconfig = { allowUnfree = true; };
+  unstable = import <unstable> { config = baseconfig; };
+in {
+
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      #./unstable.nix
     ];
 
   # Bootloader.
@@ -126,8 +132,9 @@
     distrobox
     
     # android dev
-    android-tools
-    genymotion
+    unstable.android-tools
+    unstable.android-studio
+    #genymotion
 
   ];
 

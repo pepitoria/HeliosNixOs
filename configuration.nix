@@ -47,8 +47,6 @@
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
-  #services.xserver.desktopManager.gnome.enable = true;
-
   services.xserver.desktopManager.gnome = {
         enable = true;
         extraGSettingsOverrides =
@@ -169,6 +167,10 @@
     path = [ pkgs.flatpak ];
     script = ''
       flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      flatpak update
+      flatpak install -y flathub com.spotify.Client
+      flatpak install -y flathub com.valvesoftware.Steam
+      flatpak install -y flathub org.gimp.GIMP
     '';
   };
 

@@ -14,6 +14,7 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       #./unstable.nix
+      ./hardware-acceleration.nix
     ];
 
   # Bootloader.
@@ -119,7 +120,8 @@ in {
     neofetch
     htop
     fish
-
+    dysk
+    
     # gnome
     gnome-software
     gnome-tweaks

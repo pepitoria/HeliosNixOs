@@ -47,7 +47,18 @@
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  #services.xserver.desktopManager.gnome.enable = true;
+
+  services.xserver.desktopManager.gnome = {
+        enable = true;
+        extraGSettingsOverrides =
+          let
+            #workspaces = map toString (lib.lists.range 1 3);
+          in ''
+            [org.gnome.desktop.wm.preferences]
+            button-layout=':minimize,maximize,close'
+          '';
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -88,6 +99,7 @@
     packages = with pkgs; [
     #  thunderbird
     ];
+    shell = pkgs.fish;
   };
 
   # Install firefox.
@@ -100,13 +112,25 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
     neofetch
     htop
+    fish
+
+    # gnome
     gnome-software
-    distrobox
+    gnome-tweaks
+
+    # dev
     git
     vscode
+    
+    # containers
+    distrobox
+    
+    # android dev
+    android-tools
+    genymotion
+
   ];
 
   # docker
@@ -123,6 +147,7 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+  programs.fish.enable = true;
 
   # List services that you want to enable:
 

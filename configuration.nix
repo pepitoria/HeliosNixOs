@@ -13,7 +13,6 @@ in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      #./unstable.nix
       ./hardware-acceleration.nix
     ];
 
@@ -158,8 +157,7 @@ in {
 
   # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  # OpenSSH
   services.openssh = {
     enable = true;
     ports = [22];
@@ -170,6 +168,7 @@ in {
     };
   };
 
+  # Flatpak
   services.flatpak.enable = true;
   systemd.services.flatpak-repo = {
     wantedBy = [ "multi-user.target" ];

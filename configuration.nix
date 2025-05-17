@@ -117,6 +117,7 @@ in {
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     neofetch
+    fastfetch
     htop
     fish
     dysk
@@ -179,6 +180,7 @@ in {
       flatpak install -y flathub com.spotify.Client
       flatpak install -y flathub com.valvesoftware.Steam
       flatpak install -y flathub org.gimp.GIMP
+      flatpak install -y flathub com.discordapp.Discord
     '';
   };
 

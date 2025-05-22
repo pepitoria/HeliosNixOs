@@ -4,185 +4,23 @@
 
 { config, pkgs, ... }:
 
-
-let
-  baseconfig = { allowUnfree = true; };
-  unstable = import <unstable> { config = baseconfig; };
-in {
-
+{
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./hardware-acceleration.nix
+      ./bootloader.nix
+      #./hardware-acceleration-hybrid-WIP.nix
+      #./gpu-WIP.nix
+      ./user-pep.nix
+      ./packages-and-services.nix
+      ./network.nix
+      ./i18s.nix
+      ./audio.nix
     ];
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "helios"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "Europe/Madrid";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "es_ES.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "es_ES.UTF-8";
-    LC_IDENTIFICATION = "es_ES.UTF-8";
-    LC_MEASUREMENT = "es_ES.UTF-8";
-    LC_MONETARY = "es_ES.UTF-8";
-    LC_NAME = "es_ES.UTF-8";
-    LC_NUMERIC = "es_ES.UTF-8";
-    LC_PAPER = "es_ES.UTF-8";
-    LC_TELEPHONE = "es_ES.UTF-8";
-    LC_TIME = "es_ES.UTF-8";
-  };
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome = {
-        enable = true;
-        extraGSettingsOverrides =
-          let
-            #workspaces = map toString (lib.lists.range 1 3);
-          in ''
-            [org.gnome.desktop.wm.preferences]
-            button-layout=':minimize,maximize,close'
-          '';
-  };
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "es";
-    variant = "";
-  };
-
-  # Configure console keymap
-  console.keyMap = "es";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
+  
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.pep = {
-    isNormalUser = true;
-    description = "pep";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
-    shell = pkgs.fish;
-  };
-
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    neofetch
-    fastfetch
-    htop
-    fish
-    dysk
-    
-    # gnome
-    gnome-software
-    gnome-tweaks
-
-    # dev
-    git
-    vscode
-    
-    # containers
-    distrobox
-    
-    # android dev
-    unstable.android-tools
-    unstable.android-studio
-    #genymotion
-
-  ];
-
-  # docker
-  virtualisation.docker.enable = true;
-  users.extraGroups.docker.members = [ "pep" ];
-
-  # tailscale
-  services.tailscale.enable = true;
- 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-  programs.fish.enable = true;
-
-  # List services that you want to enable:
-
-  # OpenSSH
-  services.openssh = {
-    enable = true;
-    ports = [22];
-    settings = {
-      PasswordAuthentication = true;
-      AllowUsers = null;
-      PermitRootLogin = "prohibit-password";
-    };
-  };
-
-  # Flatpak
-  services.flatpak.enable = true;
-  systemd.services.flatpak-repo = {
-    wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.flatpak ];
-    script = ''
-      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-      flatpak update
-      flatpak install -y flathub com.spotify.Client
-      flatpak install -y flathub com.valvesoftware.Steam
-      flatpak install -y flathub org.gimp.GIMP
-      flatpak install -y flathub com.discordapp.Discord
-    '';
-  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

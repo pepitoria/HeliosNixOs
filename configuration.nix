@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
       ./bootloader.nix
       #./hardware-acceleration.nix
-      ./hardware-acceleration-hybrid-WIP.nix
+      ./hardware-acceleration-hybrid.nix
       #./gpu-WIP.nix
       ./user-pep.nix
       ./packages-and-services.nix

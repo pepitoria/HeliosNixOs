@@ -19,6 +19,7 @@ in {
     pciutils
     fastfetch
     htop
+    nvtop
     fish
     dysk
     

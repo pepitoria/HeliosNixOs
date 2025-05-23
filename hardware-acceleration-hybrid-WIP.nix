@@ -10,6 +10,8 @@
 
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
+
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
       vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
@@ -34,6 +36,7 @@
 
     # Enable the Nvidia settings utility
     nvidiaSettings = true;
+    open = false;
 
     # You can specify a particular Nvidia driver package if needed.
     # The 'production' package usually refers to the latest stable driver.
@@ -48,8 +51,8 @@
 
       sync.enable = true;
 
-      intelBusId = "PCI:0:2.0"; # REPLACE WITH YOUR INTEL GPU BUS ID
-      nvidiaBusId = "PCI:1:0.0"; # REPLACE WITH YOUR NVIDIA GPU BUS ID
+      intelBusId = "PCI:0:2:0"; # REPLACE WITH YOUR INTEL GPU BUS ID
+      nvidiaBusId = "PCI:1:0:0"; # REPLACE WITH YOUR NVIDIA GPU BUS ID
     };
 
     # Uncomment this if you face issues with the Nvidia Persistence Daemon
@@ -61,19 +64,12 @@
   # boot.blacklistedKernelModules = [ "i915" ]; # Only if you want to ONLY use Nvidia
   # boot.kernelParams = [ "i915.modeset=0" ]; # Only if you want to ONLY use Nvidia
 
-  # You might also want to ensure OpenGL is correctly configured for both GPUs
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-  };
-
   # Optional: Environment variables for specific applications to ensure they use the Nvidia GPU
   # These are often set by `nvidia-offload` automatically, but you might need them for specific cases.
-  environment.sessionVariables = {
-    __NV_PRIME_RENDER_OFFLOAD = "1";
-    __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    __VK_LAYER_NV_optimus = "NVIDIA_only";
-  };
+  #environment.sessionVariables = {
+  #  __NV_PRIME_RENDER_OFFLOAD = "1";
+  #  __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
+  #  __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  #  __VK_LAYER_NV_optimus = "NVIDIA_only";
+  #};
 }

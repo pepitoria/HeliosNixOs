@@ -8,9 +8,9 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./hardware-acceleration.nix
       ./bootloader.nix
-      #./hardware-acceleration-hybrid-WIP.nix
+      #./hardware-acceleration.nix
+      ./hardware-acceleration-hybrid-WIP.nix
       #./gpu-WIP.nix
       ./user-pep.nix
       ./packages-and-services.nix

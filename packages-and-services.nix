@@ -1,9 +1,10 @@
 { config, pkgs, ... }:
 
-let
-  baseconfig = { allowUnfree = true; };
-  unstable = import <unstable> { config = baseconfig; };
-in {
+#let
+#  baseconfig = { allowUnfree = true; };
+#  unstable = import <nixos-unstable> { config = baseconfig; };
+#in 
+{
   # Install firefox.
   programs.firefox.enable = true;
   programs.fish.enable = true;
@@ -19,7 +20,7 @@ in {
     pciutils
     fastfetch
     htop
-    nvtop
+    nvtopPackages.full
     fish
     dysk
     
@@ -35,8 +36,8 @@ in {
     distrobox
     
     # android dev
-    unstable.android-tools
-    unstable.android-studio
+    #unstable.android-tools
+    #unstable.android-studio
     #genymotion
 
   ];

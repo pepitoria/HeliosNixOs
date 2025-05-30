@@ -13,6 +13,14 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
+
+################################################################################################
+##
+##
+## check devices uuids after formatting/reinstalling, these change.
+##
+##
+
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/57be5e6a-8269-48fb-82b2-452e78712e67";
       fsType = "ext4";
@@ -38,6 +46,10 @@
       ];
     };
 
+##
+##
+##
+################################################################################################
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

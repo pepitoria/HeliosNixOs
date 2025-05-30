@@ -53,6 +53,7 @@ in {
       flatpak install -y flathub com.valvesoftware.Steam
       flatpak install -y flathub org.gimp.GIMP
       flatpak install -y flathub com.discordapp.Discord
+      flatpak install -y flathub com.github.tchx84.Flatseal
     '';
   };
 

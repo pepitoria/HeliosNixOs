@@ -26,6 +26,9 @@
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
+    # to use dedicated nvidia for a specific flatpak add __NV_PRIME_RENDER_OFFLOAD=1 as env variable for the app using flatseal
+
+    
     # Enable modesetting for better integration with Wayland and modern Xorg setups
     modesetting.enable = true;
 

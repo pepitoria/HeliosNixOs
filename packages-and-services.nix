@@ -54,6 +54,8 @@ in {
       flatpak install -y flathub org.gimp.GIMP
       flatpak install -y flathub com.discordapp.Discord
       flatpak install -y flathub com.github.tchx84.Flatseal
+      flatpak install -y flathub org.ferdium.Ferdium
+      flatpak install -y flathub com.moonlight_stream.Moonlight
     '';
   };
 

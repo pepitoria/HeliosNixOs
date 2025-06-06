@@ -17,7 +17,7 @@
 ################################################################################################
 ##
 ##
-## check devices uuids after formatting/reinstalling, these change.
+## check devices uuids after formatting/reinstalling, these uuids change.
 ##
 ##
 

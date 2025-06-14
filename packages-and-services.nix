@@ -32,11 +32,11 @@ in {
     vscode
     
     # containers
-    distrobox
+    # distrobox
     
     # android dev
-    unstable.android-tools
-    unstable.android-studio
+    # unstable.android-tools
+    # unstable.android-studio
     #genymotion
 
   ];
@@ -64,6 +64,15 @@ in {
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
+
+  # Enable automatic login for the user.
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "pep";
+
+  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
+  
   services.xserver.desktopManager.gnome = {
         enable = true;
         extraGSettingsOverrides =
@@ -107,4 +116,11 @@ in {
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = true;
+    openFirewall = true;  
+  };
+  
 }

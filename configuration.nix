@@ -7,10 +7,12 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      #./hardware-configuration.nix
+      ./hardware-configuration-eva01vm.nix
       ./bootloader.nix
       #./hardware-acceleration.nix
-      ./hardware-acceleration-hybrid.nix
+      #./hardware-acceleration-hybrid.nix
+      ./hardware-acceleration-eva01vm.nix
       #./gpu-WIP.nix
       ./user-pep.nix
       ./packages-and-services.nix

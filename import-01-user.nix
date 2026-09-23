@@ -5,7 +5,9 @@
   users.users.pep = {
     isNormalUser = true;
     description = "pep";
-    extraGroups = [ "networkmanager" "wheel" ];
+    # "adbusers" is only defined when programs.adb.enable is on, which it
+    # isn't here -- android dev is commented out in import-06-packages.nix.
+    extraGroups = [ "networkmanager" "wheel" /* "adbusers" */ "kvm" "dialout"];
     packages = with pkgs; [
     #  thunderbird
     ];

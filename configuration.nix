@@ -8,19 +8,30 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./bootloader.nix
-      #./hardware-acceleration.nix
-      ./hardware-acceleration-hybrid.nix
-      #./gpu-WIP.nix
-      ./user-pep.nix
-      ./packages-and-services.nix
-      ./network.nix
-      ./i18s.nix
-      ./audio.nix
+      ./import-00-bootloader.nix
+      ./import-01-user.nix
+      ./import-02-network.nix
+      ./import-03-i18s.nix
+      ./import-04-audio.nix
+      ./import-05-desktop-gnome.nix
+      ./import-05-desktop-hyprland.nix
+      ./import-06-packages.nix
+      ./import-07-services.nix
+      ./import-08-gpu.nix
     ];
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
+  nix.gc = {
+		automatic = true;
+		dates = "weekly";
+		options = "--delete-older-than 30d";
+	};
+
+  nix.optimise = {
+		automatic = true;
+		dates = [ "weekly" ];
+	};
+
+  nix.settings.experimental-features = "nix-command flakes";
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -34,6 +45,9 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  #
+  # NOTE: this is 26.05 here, not maggie's 25.05 -- helios was reinstalled
+  # on 26.05 and this value is pinned to that original install.
   system.stateVersion = "26.05"; # Did you read the comment?
 
 }

@@ -1,5 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
+# This is the helios-specific module: an Acer Predator Helios 300 with an
+# Intel HD Graphics 630 iGPU and a GeForce GTX 1060 Mobile. Maggie's version
+# of this file is AMD + ROCm instead.
 {
   hardware.graphics = {
     enable = true;
@@ -23,15 +26,14 @@
     # the 580 branch, so `stable`/`production` (595.x) will NOT drive this card.
     package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
 
-    # Enable modesetting for better integration with Wayland and modern Xorg setups
+    # Required for Wayland (GNOME and Hyprland sessions both need it).
     modesetting.enable = true;
 
-    # Fine-grained power management (runtime D3) is Turing+ only, so it stays off
-    # on this Pascal card.
+    # Fine-grained power management (runtime D3) is Turing+ only, so it stays
+    # off on this Pascal card.
     powerManagement.enable = false;
     powerManagement.finegrained = false;
 
-    # Enable the Nvidia settings utility
     nvidiaSettings = true;
     open = false;
 
@@ -52,6 +54,8 @@
     # nvidiaPersistenced = true;
   };
 
-  # For flatpaks, add __NV_PRIME_RENDER_OFFLOAD=1 (and __GLX_VENDOR_LIBRARY_NAME=nvidia)
-  # as env variables for the app using flatseal.
+  # For flatpaks, add __NV_PRIME_RENDER_OFFLOAD=1 (and
+  # __GLX_VENDOR_LIBRARY_NAME=nvidia) as env variables via flatseal.
+
+  users.users.pep.extraGroups = [ "video" "render" ];
 }

@@ -1,0 +1,11 @@
+# Launcher settings -- copy to ~/.config/wofi/config
+# Invoked as `wofi --show drun` by SUPER + SPACE in hyprland.conf.
+
+width=600
+height=400
+prompt=Search
+insensitive=true
+allow_images=true
+image_size=24
+no_actions=true
+hide_scroll=true

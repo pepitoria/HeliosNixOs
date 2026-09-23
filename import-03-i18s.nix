@@ -21,5 +21,4 @@
 
   # Configure console keymap
   console.keyMap = "es";
-
 }

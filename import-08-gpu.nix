@@ -19,6 +19,22 @@
     ];
   };
 
+  # NOTE: deliberately NO global LIBVA_DRIVER_NAME here.
+  #
+  # libva's auto-detection is per-device and already correct on this machine:
+  # `vainfo --display drm --device /dev/dri/renderD128` with no env var set
+  # resolves to iHD (Intel iHD driver 26.1.6) on its own.
+  #
+  # Setting it in environment.sessionVariables would apply to every process,
+  # including ones using the NVIDIA node -- and forcing iHD onto
+  # /dev/dri/renderD129 fails hard (va_openDriver() returns 18). That would
+  # break VAAPI decode for anything run through nvidia-offload (moonlight-qt
+  # being the obvious one here) for no gain.
+  #
+  # If a single app ever needs pinning, do it per-process instead:
+  #   LIBVA_DRIVER_NAME=iHD obs
+  # and use "i965" (intel-vaapi-driver, above) if iHD misbehaves on Kaby Lake.
+
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {

@@ -18,6 +18,7 @@
       ./import-06-packages.nix
       ./import-07-services.nix
       ./import-08-gpu.nix
+      ./import-09-streaming.nix
     ];
 
   nix.gc = {

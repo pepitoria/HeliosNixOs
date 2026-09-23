@@ -1,0 +1,6 @@
+# nixos-rebuild build output
+result
+result-*
+
+# claude code local settings
+.claude/

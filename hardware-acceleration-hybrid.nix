@@ -1,23 +1,16 @@
 { config, pkgs, lib, ... }:
 
 {
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
-
-  # for nvidia
-  nixpkgs.config.allowUnFree = true;
-
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
 
     extraPackages = with pkgs; [
-      intel-media-driver # LIBVA_DRIVER_NAME=iHD
-      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
-      vaapiVdpau
+      intel-media-driver   # LIBVA_DRIVER_NAME=iHD
+      intel-vaapi-driver   # LIBVA_DRIVER_NAME=i965 (was `vaapiIntel`, renamed in nixpkgs)
+      libva-vdpau-driver   # was `vaapiVdpau`, renamed in nixpkgs
       libvdpau-va-gl
-      
+
       # nvidia
       nvidia-vaapi-driver
     ];
@@ -26,53 +19,39 @@
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-    # to use dedicated nvidia for a specific flatpak add __NV_PRIME_RENDER_OFFLOAD=1 as env variable for the app using flatseal
+    # The GTX 1060 is Pascal (GP106). NVIDIA dropped Maxwell/Pascal/Volta after
+    # the 580 branch, so `stable`/`production` (595.x) will NOT drive this card.
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
 
-    
     # Enable modesetting for better integration with Wayland and modern Xorg setups
     modesetting.enable = true;
 
-    # Enable Nvidia power management (optional, can sometimes cause issues with sleep/suspend)
-    # For a GTX 1060, fine-grained power management might not be fully supported.
-    powerManagement.enable = false; # Set to true if you want to try it, monitor for issues
-    powerManagement.finegrained = false; # Likely not supported on 1060
+    # Fine-grained power management (runtime D3) is Turing+ only, so it stays off
+    # on this Pascal card.
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
 
     # Enable the Nvidia settings utility
     nvidiaSettings = true;
     open = false;
 
-    # You can specify a particular Nvidia driver package if needed.
-    # The 'production' package usually refers to the latest stable driver.
-    # For a GTX 1060, `production` should work fine.
-    # package = config.boot.kernelPackages.nvidiaPackages.production;
-
-    # Prime setup for offloading (most common and recommended for laptops)
     prime = {
-      # Enable offload mode: Intel GPU is primary, Nvidia GPU is used when explicitly requested.
-      #offload.enable = true;
-      #offload.enableOffloadCmd = true; # Enables the 'nvidia-offload' command
+      # Offload mode: the Intel iGPU drives the display, the Nvidia GPU is only
+      # spun up when explicitly requested via `nvidia-offload <cmd>`.
+      # (Don't enable sync.enable at the same time.)
+      offload.enable = true;
+      offload.enableOffloadCmd = true; # provides the `nvidia-offload` command
 
-      sync.enable = true;
+      #sync.enable = true;
 
-      intelBusId = "PCI:0:2:0"; # REPLACE WITH YOUR INTEL GPU BUS ID
-      nvidiaBusId = "PCI:1:0:0"; # REPLACE WITH YOUR NVIDIA GPU BUS ID
+      intelBusId = "PCI:0:2:0";  # 0000:00:02.0 Intel HD Graphics 630
+      nvidiaBusId = "PCI:1:0:0"; # 0000:01:00.0 GeForce GTX 1060 Mobile
     };
 
     # Uncomment this if you face issues with the Nvidia Persistence Daemon
     # nvidiaPersistenced = true;
   };
 
-  # If you want to use the Nvidia GPU as the primary for everything (less common for laptops due to battery life)
-  # You would disable prime.offload and potentially blacklist the Intel module.
-  # boot.blacklistedKernelModules = [ "i915" ]; # Only if you want to ONLY use Nvidia
-  # boot.kernelParams = [ "i915.modeset=0" ]; # Only if you want to ONLY use Nvidia
-
-  # Optional: Environment variables for specific applications to ensure they use the Nvidia GPU
-  # These are often set by `nvidia-offload` automatically, but you might need them for specific cases.
-  #environment.sessionVariables = {
-  #  __NV_PRIME_RENDER_OFFLOAD = "1";
-  #  __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
-  #  __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-  #  __VK_LAYER_NV_optimus = "NVIDIA_only";
-  #};
+  # For flatpaks, add __NV_PRIME_RENDER_OFFLOAD=1 (and __GLX_VENDOR_LIBRARY_NAME=nvidia)
+  # as env variables for the app using flatseal.
 }

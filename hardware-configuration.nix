@@ -13,30 +13,29 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-
 ################################################################################################
 ##
 ##
 ## check devices uuids after formatting/reinstalling, these uuids change.
-##
+## (regenerated 2026-09-23 after the reinstall)
 ##
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/57be5e6a-8269-48fb-82b2-452e78712e67";
+    { device = "/dev/disk/by-uuid/04f335fe-b8a0-4711-a799-94d81bf3e7cc";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/FFFD-0657";
+    { device = "/dev/disk/by-uuid/564D-6EB6";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/0e110245-2d45-41c8-ad16-8d38b8569bcb"; }
+    [ { device = "/dev/disk/by-uuid/dedeba77-70eb-4d86-8be9-fdce8471532e"; }
     ];
 
-# /dev/disk/by-uuid/91f79ba4-4fab-4f79-91cd-0f7d16b136ce /run/media/pep/rust1tb ext4 rw,nosuid,nodev,relatime,errors=remount-ro 0 0
+# the 1TB spinning rust data disk (/dev/sdb), uuid survived the reinstall
   fileSystems."/run/media/pep/rust1tb" =
     { device = "/dev/disk/by-uuid/91f79ba4-4fab-4f79-91cd-0f7d16b136ce";
       fsType = "ext4";
@@ -56,8 +55,6 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp3s0f1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp2s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

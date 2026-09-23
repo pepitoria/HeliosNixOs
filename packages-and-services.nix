@@ -1,9 +1,15 @@
 { config, pkgs, ... }:
 
-let
-  baseconfig = { allowUnfree = true; };
-  unstable = import <unstable> { config = baseconfig; };
-in {
+# NOTE: the <unstable> channel is no longer used on this install (2026-09-23).
+# android-tools / android-studio are recent enough in the 26.05 channel.
+# To bring it back: run ./addUnstableChannel.sh, uncomment the let block below
+# and prefix the packages with `unstable.`.
+#
+# let
+#   baseconfig = { allowUnfree = true; };
+#   unstable = import <unstable> { config = baseconfig; };
+# in
+{
   # Install firefox.
   programs.firefox.enable = true;
   programs.fish.enable = true;
@@ -22,7 +28,7 @@ in {
     nvtopPackages.full
     fish
     dysk
-    
+
     # gnome
     gnome-software
     gnome-tweaks
@@ -30,13 +36,13 @@ in {
     # dev
     git
     vscode
-    
+
     # containers
     distrobox
-    
+
     # android dev
-    unstable.android-tools
-    unstable.android-studio
+    android-tools    # was unstable.android-tools
+    android-studio   # was unstable.android-studio
     #genymotion
 
   ];
@@ -63,16 +69,14 @@ in {
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome = {
-        enable = true;
-        extraGSettingsOverrides =
-          let
-            #workspaces = map toString (lib.lists.range 1 3);
-          in ''
-            [org.gnome.desktop.wm.preferences]
-            button-layout=':minimize,maximize,close'
-          '';
+  # NOTE: these two moved out of services.xserver.* in 24.05.
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome = {
+    enable = true;
+    extraGSettingsOverrides = ''
+      [org.gnome.desktop.wm.preferences]
+      button-layout=':minimize,maximize,close'
+    '';
   };
 
   # Configure keymap in X11

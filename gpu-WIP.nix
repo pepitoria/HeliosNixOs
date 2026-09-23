@@ -6,7 +6,8 @@
       
   # Driver Version
   hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
+    # NOTE: `latest`/`stable` (595.x) dropped Pascal support - the 1060 needs legacy_580.
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
     modesetting.enable = true;
     powerManagement.enable = true;
     powerManagement.finegrained = true;
